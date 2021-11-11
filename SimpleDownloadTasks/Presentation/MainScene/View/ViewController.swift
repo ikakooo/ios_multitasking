@@ -39,9 +39,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         downloadsTableView.dataSource = self
         completedTableView.dataSource = self
-        downloadsTableView.register(UINib(nibName: "ProgressCell", bundle: nil), forCellReuseIdentifier: "ProgressCell")
-        completedTableView.register(UINib(nibName: "ProgressCell", bundle: nil), forCellReuseIdentifier: "ProgressCell")
-        option = SimulationOption(jobCount: 1, maxAsyncTasks: 2, isRandomizedTime: true)
+        downloadsTableView.registerNib(class: ProgressCell.self)
+        completedTableView.registerNib(class: ProgressCell.self)
+        option = SimulationOption(jobCount: 1, maxAsyncTasks: 1, isRandomizedTime: true)
     }
     @IBAction func onAllTasksCountSlider(_ sender: UISlider) {
         option.jobCount = Int(sender.value)
@@ -139,11 +139,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ProgressCell", for: indexPath) as! ProgressCell
-        
-        //print(indexPath.row)
-       // cell.delegate = self
-       // cell.configure(with: postsList[indexPath.row])
+        let cell = tableView.deque(ProgressCell.self, for: indexPath)
         
         if tableView == downloadsTableView {
             cell.configure(with: downloadTasks[indexPath.row])
